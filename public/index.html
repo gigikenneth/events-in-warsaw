@@ -7,7 +7,7 @@
 <meta name="description" content="Every public Luma event in Warsaw, including the ones Luma's city page leaves out. Subscribe as a calendar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #fbf7ff;
@@ -18,7 +18,7 @@
     --pink: #d93d8f;
     --blue: #3b78d8;
     --violet: #7c4fe0;
-    --display: 'Quicksand', system-ui, sans-serif;
+    --display: 'Caprasimo', 'Cooper Black', Georgia, serif;
     --body: 'Quicksand', system-ui, sans-serif;
     --mono: 'Quicksand', system-ui, sans-serif;
   }
@@ -49,13 +49,13 @@
 
   header { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; padding-bottom: 40px; border-bottom: 1px solid var(--line); }
   .kicker { font: 700 14px var(--mono); color: var(--violet); letter-spacing: .02em; margin-bottom: 18px; }
-  h1 { font: 700 clamp(56px, 11vw, 128px)/.9 var(--display); letter-spacing: -.025em; }
+  h1 { font: 400 clamp(54px, 10.5vw, 124px)/.95 var(--display); letter-spacing: -.01em; }
   h1 em { font-style: normal; color: var(--pink); }
   .lede { margin-top: 22px; max-width: 46ch; color: var(--muted); font-size: 17px; }
   .lede b { color: var(--fg); font-weight: 600; }
 
   .tally { text-align: right; }
-  .tally .n { font: 700 clamp(64px, 10vw, 108px)/1 var(--display); color: var(--blue); }
+  .tally .n { font: 400 clamp(64px, 10vw, 108px)/1 var(--display); color: var(--blue); }
   .tally .n span { color: var(--muted); font-size: .42em; margin: 0 .15em; }
   .tally p { font: 13px var(--mono); color: var(--muted); max-width: 22ch; margin-left: auto; }
 
@@ -73,7 +73,7 @@
 
   .day { display: grid; grid-template-columns: 132px 1fr; gap: 24px; padding: 28px 0; border-top: 1px solid var(--line); animation: rise .6s both; }
   .date .dow { font: 700 14px var(--mono); color: var(--violet); }
-  .date .num { font: 700 60px/1 var(--display); }
+  .date .num { font: 400 60px/1 var(--display); }
   .date .mon { font: 13px var(--mono); color: var(--muted); }
   .date.today .num { color: var(--pink); }
   .events { display: grid; gap: 10px; }
@@ -90,14 +90,53 @@
   .tag.free { background: #3b78d817; color: var(--blue); }
   .tag.pl { background: #7c4fe017; color: var(--violet); }
   .tag.price { background: var(--card); color: var(--muted); }
-  .arrow { font: 600 22px var(--display); color: var(--muted); transition: transform .2s, color .2s; }
+  .arrow { font: 700 22px var(--body); color: var(--muted); transition: transform .2s, color .2s; }
   .ev:hover .arrow { transform: translateX(4px); color: var(--pink); }
+
+  .bar { flex-direction: column; align-items: stretch; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .filters { justify-content: flex-start; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { all: unset; cursor: pointer; padding: 7px 13px; border-radius: 999px; font: 600 13px var(--body); color: var(--muted); border: 1px solid var(--line); background: var(--card); display: inline-flex; align-items: center; gap: 7px; transition: .15s; }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  .chip small { font: inherit; opacity: .6; }
+  .chip[aria-pressed="true"] { background: var(--c); border-color: var(--c); color: #fff; }
+  .chip[aria-pressed="true"] i { background: #fff; }
+  .chip:focus-visible, .nav:focus-visible, .cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  #month { border-top: 1px solid var(--line); padding-top: 24px; }
+  .mhead { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .mhead h2 { font: 400 clamp(32px, 5vw, 48px)/1 var(--display); min-width: 9ch; text-align: center; }
+  .mhead .btn { margin-left: auto; }
+  .nav { all: unset; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 700 26px var(--body); background: var(--card); border: 1px solid var(--line); transition: .15s; }
+  .nav:hover { background: var(--fg); color: var(--bg); }
+  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; touch-action: pan-y; user-select: none; }
+  .grid.slide-l { animation: slideL .3s both; }
+  .grid.slide-r { animation: slideR .3s both; }
+  .wd { font: 700 12px var(--body); color: var(--muted); text-align: center; padding: 4px 0; }
+  .cell { all: unset; box-sizing: border-box; cursor: pointer; min-height: 116px; padding: 8px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; overflow: hidden; transition: .15s; }
+  .cell:hover { border-color: var(--violet); }
+  .cell.out { background: transparent; border-color: transparent; opacity: .45; }
+  .cell.empty { cursor: default; }
+  .cell.empty:hover { border-color: var(--line); }
+  .cell.past { opacity: .5; }
+  .cell.sel { border-color: var(--pink); box-shadow: 0 0 0 2px var(--pink); }
+  .cell .d { font: 700 14px var(--body); }
+  .cell.today .d { background: var(--pink); color: #fff; border-radius: 999px; width: 26px; height: 26px; display: grid; place-items: center; }
+  .pill { font: 600 11.5px/1.25 var(--body); padding: 3px 6px; border-radius: 7px; background: color-mix(in srgb, var(--c) 13%, transparent); color: color-mix(in srgb, var(--c) 75%, var(--fg)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .more { font: 700 11.5px var(--body); color: var(--muted); padding-left: 4px; }
+  .dots { display: none; gap: 3px; flex-wrap: wrap; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+  #dayPanel { margin-top: 28px; }
+  #dayPanel h3.dp { font: 400 28px var(--display); margin-bottom: 8px; }
+  @keyframes slideL { from { opacity: 0; transform: translateX(40px); } }
+  @keyframes slideR { from { opacity: 0; transform: translateX(-40px); } }
 
   .state { padding: 80px 0; text-align: center; color: var(--muted); font: 15px var(--mono); }
   .state .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--pink); margin-right: 10px; animation: pulse 1s infinite alternate; }
 
   .howto { margin-top: 56px; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); display: grid; gap: 10px; }
-  .howto h2 { font: 700 28px var(--display); }
+  .howto h2 { font: 400 28px var(--display); }
   .howto p, .howto li { color: var(--muted); font-size: 15px; }
   .howto ol { padding-left: 20px; display: grid; gap: 6px; }
   .howto code { font: 13px var(--mono); color: var(--blue); word-break: break-all; }
@@ -121,6 +160,11 @@
     .ev { grid-template-columns: 56px 1fr; gap: 14px; padding: 10px 0; }
     .ev img { width: 56px; height: 56px; }
     .arrow { display: none; }
+    .bar { position: static; }
+    .cell { min-height: 58px; padding: 6px 4px; align-items: center; border-radius: 10px; }
+    .pill, .more { display: none; }
+    .dots { display: flex; justify-content: center; }
+    .mhead h2 { font-size: 28px; }
   }
 </style>
 </head>
@@ -130,7 +174,7 @@
     <div>
       <p class="kicker">Luma, unfiltered · Warsaw</p>
       <h1>Warsaw,<br><em>this week.</em></h1>
-      <p class="lede">Every public Luma event in the city for the next five weeks, <b>including the ones Luma's Warsaw page never shows you</b>.</p>
+      <p class="lede">Every public Luma event in the city for the next few months, <b>including the ones Luma's Warsaw page never shows you</b>.</p>
     </div>
     <div class="tally" aria-live="polite">
       <div class="n" id="tally">…</div>
@@ -139,18 +183,37 @@
   </header>
 
   <div class="bar">
-    <div class="seg" role="group" aria-label="Language">
-      <button data-f="en" aria-pressed="true">In English</button>
-      <button data-f="all" aria-pressed="false">Everything</button>
-      <button data-f="hidden" aria-pressed="false">Hidden by Luma</button>
+    <div class="row">
+      <div class="seg" role="group" aria-label="View">
+        <button data-v="list" aria-pressed="true">List</button>
+        <button data-v="month" aria-pressed="false">Month</button>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
+        <button class="btn ghost" id="copy">Copy feed link</button>
+      </div>
     </div>
-    <div class="actions">
-      <a class="btn primary" id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
-      <button class="btn ghost" id="copy">Copy feed link</button>
+    <div class="row filters">
+      <div class="seg" role="group" aria-label="Language">
+        <button data-f="en" aria-pressed="true">In English</button>
+        <button data-f="all" aria-pressed="false">Everything</button>
+        <button data-f="hidden" aria-pressed="false">Hidden by Luma</button>
+      </div>
+      <div class="chips" id="topics" role="group" aria-label="Topics"></div>
     </div>
   </div>
 
   <main id="list"><p class="state"><span class="dot"></span>Pulling events from Luma</p></main>
+  <section id="month" hidden>
+    <div class="mhead">
+      <button class="nav" id="prev" aria-label="Previous month">‹</button>
+      <h2 id="mtitle"></h2>
+      <button class="nav" id="next" aria-label="Next month">›</button>
+      <button class="btn ghost" id="todayBtn">Today</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div id="dayPanel"></div>
+  </section>
 
   <section class="howto">
     <h2>Put it in your calendar</h2>
@@ -180,24 +243,64 @@ const fmt = (o) => new Intl.DateTimeFormat('en-GB', { timeZone: TZ, ...o });
 const dayKey = fmt({ year: 'numeric', month: '2-digit', day: '2-digit' });
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-let events = [], filter = 'en';
-try { filter = localStorage.getItem('filter') || 'en'; } catch {}
+const COLORS = ['#d93d8f', '#3b78d8', '#7c4fe0', '#b0408f', '#2f5fb0', '#5b3db8', '#e0679f', '#6a9be6'];
+const ymd = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }); // yyyy-mm-dd in Warsaw time
+const store = (k, v) => { try { v === undefined ? (v = localStorage.getItem(k)) : localStorage.setItem(k, v); } catch {} return v; };
+
+let events = [], topicColor = {};
+let filter = store('filter') || 'en';
+let view = store('view') || 'list';
+let topics = new Set(JSON.parse(store('topics') || '[]'));
+let cursor = ymd.format(new Date()).slice(0, 7); // yyyy-mm shown in month view
+let selDay = null;
+
+const topicsOf = (e) => (e.topics.length ? e.topics : ['Other']);
+
+function shownEvents() {
+  return events.filter((e) =>
+    (filter === 'all' || (filter === 'en' ? e.english : !e.onCityPage)) &&
+    (!topics.size || topicsOf(e).some((t) => topics.has(t))));
+}
+
+function renderTopics() {
+  const counts = {};
+  for (const e of events) for (const t of topicsOf(e)) counts[t] = (counts[t] || 0) + 1;
+  const names = Object.keys(counts).sort((a, b) => (a === 'Other') - (b === 'Other') || counts[b] - counts[a]);
+  names.forEach((t, i) => topicColor[t] ??= COLORS[i % COLORS.length]);
+  const el = document.getElementById('topics');
+  el.innerHTML = `<button class="chip" data-t="" style="--c:var(--fg)" aria-pressed="${!topics.size}">All topics</button>` +
+    names.map((t) => `<button class="chip" data-t="${esc(t)}" style="--c:${topicColor[t]}" aria-pressed="${topics.has(t)}"><i></i>${esc(t)} <small>${counts[t]}</small></button>`).join('');
+  el.querySelectorAll('.chip').forEach((b) => b.onclick = () => {
+    const t = b.dataset.t;
+    if (!t) topics.clear(); else topics.has(t) ? topics.delete(t) : topics.add(t);
+    store('topics', JSON.stringify([...topics]));
+    renderTopics(); render();
+  });
+}
 
 function render() {
-  document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.f === filter));
-  const shown = events.filter((e) => filter === 'all' || (filter === 'en' ? e.english : !e.onCityPage));
+  document.querySelectorAll('[data-f]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.f === filter));
+  document.querySelectorAll('[data-v]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === view));
+  const shown = shownEvents();
   const hidden = shown.filter((e) => !e.onCityPage).length;
   document.getElementById('tally').innerHTML = `${shown.length}<span>/</span>${shown.length - hidden}`;
   document.getElementById('tallyNote').textContent = `here, versus on Luma's own Warsaw page`;
+  document.getElementById('list').hidden = view !== 'list';
+  document.getElementById('month').hidden = view !== 'month';
+  view === 'list' ? renderList(shown) : renderMonth(shown);
+}
 
+function byDay(list) {
   const days = new Map();
-  for (const e of shown) {
-    const k = dayKey.format(new Date(e.start));
-    days.get(k)?.push(e) ?? days.set(k, [e]);
-  }
-  const today = dayKey.format(new Date());
+  for (const e of list) { const k = ymd.format(new Date(e.start)); days.get(k)?.push(e) ?? days.set(k, [e]); }
+  return days;
+}
+
+function renderList(shown) {
+  const days = byDay(shown);
+  const today = ymd.format(new Date());
   const list = document.getElementById('list');
-  if (!shown.length) { list.innerHTML = '<p class="state">Nothing here right now.</p>'; return; }
+  if (!shown.length) { list.innerHTML = '<p class="state">Nothing matches these filters right now.</p>'; return; }
   list.innerHTML = [...days].map(([k, evs], i) => {
     const d = new Date(evs[0].start);
     return `<section class="day" style="animation-delay:${Math.min(i, 8) * 60}ms">
@@ -210,6 +313,68 @@ function render() {
     </section>`;
   }).join('');
 }
+
+function renderMonth(shown, slide) {
+  const days = byDay(shown);
+  const today = ymd.format(new Date());
+  const [y, m] = cursor.split('-').map(Number);
+  const first = new Date(Date.UTC(y, m - 1, 1));
+  const start = new Date(first - ((first.getUTCDay() + 6) % 7) * 864e5); // back to Monday
+  const weeks = Math.ceil(((first.getUTCDay() + 6) % 7 + new Date(Date.UTC(y, m, 0)).getUTCDate()) / 7);
+  document.getElementById('mtitle').textContent = first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+  if (!selDay || selDay.slice(0, 7) !== cursor) {
+    const firstWith = [...days.keys()].sort().find((k) => k.startsWith(cursor) && k >= today);
+    selDay = today.startsWith(cursor) ? today : firstWith || null;
+  }
+
+  const cells = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => `<div class="wd">${d}</div>`);
+  for (let i = 0; i < weeks * 7; i++) {
+    const k = new Date(+start + i * 864e5).toISOString().slice(0, 10);
+    const evs = days.get(k) || [];
+    const cls = ['cell', !k.startsWith(cursor) && 'out', !evs.length && 'empty', k < today && 'past', k === today && 'today', k === selDay && 'sel'].filter(Boolean).join(' ');
+    const label = `${Number(k.slice(8))}, ${evs.length} event${evs.length === 1 ? '' : 's'}`;
+    cells.push(`<button class="${cls}" data-k="${k}" aria-label="${label}"><span class="d">${Number(k.slice(8))}</span>
+      ${evs.slice(0, 3).map((e) => `<span class="pill" style="--c:${topicColor[topicsOf(e)[0]]}">${esc(e.name)}</span>`).join('')}
+      ${evs.length > 3 ? `<span class="more">+${evs.length - 3} more</span>` : ''}
+      <span class="dots">${evs.slice(0, 4).map((e) => `<i style="--c:${topicColor[topicsOf(e)[0]]}"></i>`).join('')}</span></button>`);
+  }
+  const grid = document.getElementById('grid');
+  grid.innerHTML = cells.join('');
+  grid.className = 'grid' + (slide ? ' slide-' + slide : '');
+  grid.querySelectorAll('.cell:not(.empty)').forEach((c) => c.onclick = () => { selDay = c.dataset.k; renderMonth(shownEvents()); document.getElementById('dayPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+
+  const panel = document.getElementById('dayPanel');
+  const evs = selDay && days.get(selDay);
+  panel.innerHTML = evs
+    ? `<h3 class="dp">${new Date(selDay + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}</h3><div class="events">${evs.map(card).join('')}</div>`
+    : `<p class="state">${[...days.keys()].some((k) => k.startsWith(cursor)) ? 'Tap a day to see its events.' : 'Nothing posted for this month yet. Hosts usually list events two to four weeks out.'}</p>`;
+}
+
+function shiftMonth(n) {
+  const [y, m] = cursor.split('-').map(Number);
+  const d = new Date(Date.UTC(y, m - 1 + n, 1));
+  cursor = d.toISOString().slice(0, 7);
+  selDay = null;
+  renderMonth(shownEvents(), n > 0 ? 'l' : 'r');
+}
+document.getElementById('prev').onclick = () => shiftMonth(-1);
+document.getElementById('next').onclick = () => shiftMonth(1);
+document.getElementById('todayBtn').onclick = () => { cursor = ymd.format(new Date()).slice(0, 7); selDay = null; renderMonth(shownEvents()); };
+addEventListener('keydown', (e) => {
+  if (view !== 'month' || e.target.closest('input, textarea')) return;
+  if (e.key === 'ArrowLeft') shiftMonth(-1);
+  if (e.key === 'ArrowRight') shiftMonth(1);
+});
+// swipe left/right on the grid to change month
+let touchX = null;
+const grid = document.getElementById('grid');
+grid.addEventListener('pointerdown', (e) => { touchX = e.clientX; });
+grid.addEventListener('pointerup', (e) => {
+  if (touchX === null) return;
+  const dx = e.clientX - touchX; touchX = null;
+  if (Math.abs(dx) > 50) shiftMonth(dx < 0 ? 1 : -1);
+});
 
 function card(e) {
   const time = fmt({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start));
@@ -230,14 +395,12 @@ function card(e) {
   </a>`;
 }
 
-document.querySelectorAll('.seg button').forEach((b) => b.onclick = () => {
-  filter = b.dataset.f;
-  try { localStorage.setItem('filter', filter); } catch {}
-  render();
-});
+document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); render(); });
+document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { view = store('view', b.dataset.v); render(); });
 
 fetch('/events.json').then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((d) => {
   events = d.events;
+  renderTopics();
   document.getElementById('foot').textContent = 'Updated ' + fmt({ dateStyle: 'medium', timeStyle: 'short' }).format(new Date(d.updated)) + ' · data from Luma\'s public site';
   render();
 }).catch(() => {
