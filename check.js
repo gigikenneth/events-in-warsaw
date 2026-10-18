@@ -23,6 +23,7 @@ console.log('sources', status);
 const en = events.filter((e) => e.english);
 console.log(`${events.length} events after merge, ${en.length} English, ${events.filter((e) => e.links.length > 1).length} merged`);
 for (const e of events.filter((e) => e.links.length > 1)) console.log('  merged:', e.name.slice(0, 50), e.links.map((l) => l.source).join(' + '));
+assert(events.filter((e) => e.source === 'Resident Advisor').every((e) => e.topics.includes('Music & Nightlife')), 'RA events lost their topic');
 const ics = toICS(en);
 assert(ics.startsWith('BEGIN:VCALENDAR') && ics.split('BEGIN:VEVENT').length - 1 === en.length);
 const keys = events.map((e) => e.start + e.name); // same title twice a day at different times is two sessions

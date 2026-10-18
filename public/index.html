@@ -107,7 +107,9 @@
 
   .ev { display: grid; grid-template-columns: 76px 1fr auto; gap: 18px; align-items: center; padding: 12px; border-radius: 16px; color: inherit; text-decoration: none; transition: background .2s; }
   .ev:hover { background: var(--card); box-shadow: 0 6px 24px #7045F614; }
-  .ev img { width: 76px; height: 76px; border-radius: 12px; object-fit: cover; background: var(--line); }
+  .thumb { width: 76px; height: 76px; border-radius: 14px; overflow: hidden; position: relative; background: color-mix(in srgb, var(--c) 55%, #fff); display: grid; place-items: center; }
+  .thumb::before { content: attr(data-ic); font-size: 30px; }
+  .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .ev h3 { font: 700 17px/1.3 var(--display); letter-spacing: -.01em; }
   .meta { font-size: 14px; color: var(--muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
   .meta .t { font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
@@ -167,7 +169,7 @@
   .s-smile { width: 58px; top: 70px; right: 6%; animation-delay: -3s; animation-duration: 7s; }
   .s-squig { width: 90px; bottom: 40px; right: 36%; animation-delay: -2s; animation-duration: 8s; }
   .s-arrow { width: 70px; bottom: 74px; right: 210px; animation-delay: -4s; }
-  .s-spark { width: 30px; top: -10px; left: -14px; animation-duration: 5s; }
+  .s-spark { width: 30px; top: -22px; left: -30px; animation-duration: 5s; }
   @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-8px) rotate(5deg); } }
   header > div, .tally { position: relative; z-index: 1; }
   .mhead { position: relative; }
@@ -272,7 +274,8 @@
     #dayPanel { margin-top: 20px; }
     #dayPanel h3.dp { font-size: 24px; }
     .ev { grid-template-columns: 56px 1fr; gap: 12px; padding: 10px 0; }
-    .ev img { width: 56px; height: 56px; }
+    .thumb { width: 56px; height: 56px; }
+    .thumb::before { font-size: 24px; }
     .ev h3 { font-size: 16px; }
     .meta { font-size: 13px; }
     .arrow { display: none; }
@@ -544,7 +547,7 @@ function card(e) {
     `<span class="tag cat-t" style="--c:${topicColor[topicsOf(e)[0]] || '#ECE6DA'}">${catIcon(topicsOf(e)[0])} ${esc(topicsOf(e)[0])}</span>`,
   ].filter(Boolean).join('');
   return `<a class="ev" href="${esc(e.url)}" target="_blank" rel="noopener">
-    <img src="${esc(e.cover)}" alt="" loading="lazy" onerror="this.removeAttribute('src')">
+    <span class="thumb" style="--c:${topicColor[topicsOf(e)[0]] || '#ECE6DA'}" data-ic="${catIcon(topicsOf(e)[0])}">${e.cover ? `<img src="${esc(e.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>
     <div>
       <h3>${esc(e.name)}</h3>
       <div class="meta"><span class="t">${time}</span>${e.venue ? `<span>${esc(e.venue)}</span>` : ''}${e.host ? `<span>by ${esc(e.host)}</span>` : ''}</div>
