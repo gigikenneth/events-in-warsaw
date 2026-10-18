@@ -104,6 +104,10 @@ node check.js
 
 Runs the self-checks (English filter, Warsaw time conversion, duplicate detection) and then a live fetch from every source, failing if any source errors or an event appears twice.
 
+## Contact
+
+Not affiliated with Luma, Meetup, Eventbrite or Resident Advisor. Every event links to its original page. Removal requests and mix-ups: hello@gigikenneth.com
+
 ## Limits
 
 - Facebook events aren't included. They need a login and have no workable public access.

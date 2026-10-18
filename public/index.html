@@ -232,6 +232,8 @@
   .howto p, .howto li { color: var(--muted); font-size: 15px; }
   .howto ol { padding-left: 20px; display: grid; gap: 6px; }
   .howto code { font: 13px var(--mono); color: var(--purple); word-break: break-all; }
+  footer .disc { margin-bottom: 6px; max-width: 70ch; }
+  footer a { color: var(--purple); }
   footer { margin-top: 32px; font: 12px var(--mono); color: var(--muted); }
 
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 999px; font: 700 14px var(--body); transition: .25s; pointer-events: none; z-index: 10; }
@@ -366,7 +368,10 @@
     </ol>
     <p>Feed: <code id="feedUrl"></code></p>
   </section>
-  <footer id="foot"></footer>
+  <footer>
+    <p class="disc">Not affiliated with Luma, Meetup, Eventbrite or Resident Advisor. Every event links to its original page. Organisers can ask for removal, and anyone can report a mix-up, at <a href="mailto:hello@gigikenneth.com?subject=wyd%20warsaw%3F">hello@gigikenneth.com</a>.</p>
+    <p id="foot"></p>
+  </footer>
 </div>
 <div class="toast" id="toast" role="status">Feed link copied</div>
 <button class="btn fun fab" id="fab">🎲 Surprise me</button>
