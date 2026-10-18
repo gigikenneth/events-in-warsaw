@@ -272,7 +272,7 @@ function renderTopics() {
   names.forEach((t, i) => topicColor[t] ??= COLORS[i % COLORS.length]);
   const el = document.getElementById('topics');
   el.innerHTML = `<button class="chip" data-t="" style="--c:var(--fg)" aria-pressed="${!topics.size}">All topics</button>` +
-    names.map((t) => `<button class="chip" data-t="${esc(t)}" style="--c:${topicColor[t]}" aria-pressed="${topics.has(t)}"><i></i>${esc(t)} <small>${counts[t]}</small></button>`).join('');
+    names.filter((t) => counts[t] || topics.has(t)).map((t) => `<button class="chip" data-t="${esc(t)}" style="--c:${topicColor[t]}" aria-pressed="${topics.has(t)}"><i></i>${esc(t)} <small>${counts[t]}</small></button>`).join('');
   el.querySelectorAll('.chip').forEach((b) => b.onclick = () => {
     const t = b.dataset.t;
     if (!t) topics.clear(); else topics.has(t) ? topics.delete(t) : topics.add(t);
