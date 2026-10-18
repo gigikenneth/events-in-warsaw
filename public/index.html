@@ -3,8 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>wyd warsaw?</title>
-<meta name="description" content="wyd warsaw? Every public event in Warsaw from Luma, Meetup, Eventbrite and Resident Advisor in one calendar, with an English filter.">
+<title>wyd warsaw? English events in Warsaw this week</title>
+<meta name="description" content="What's on in Warsaw in English: meetups, comedy, language exchanges, tech talks, club nights and more from Luma, Meetup, Eventbrite and Resident Advisor, in one calendar you can subscribe to.">
+<link rel="canonical" href="https://events-in-warsaw.vercel.app/">
+<meta name="theme-color" content="#7045F6">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="wyd warsaw?">
+<meta property="og:title" content="wyd warsaw? English events in Warsaw">
+<meta property="og:description" content="Every English-friendly event in Warsaw from four event sites, in one calendar. Meetups, comedy, language exchanges, club nights and more.">
+<meta property="og:url" content="https://events-in-warsaw.vercel.app/">
+<meta property="og:image" content="https://events-in-warsaw.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="wyd warsaw? English events in Warsaw, in one calendar">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="wyd warsaw? English events in Warsaw">
+<meta name="twitter:description" content="Every English-friendly event in Warsaw from four event sites, in one calendar.">
+<meta name="twitter:image" content="https://events-in-warsaw.vercel.app/og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","@id":"https://events-in-warsaw.vercel.app/#site","name":"wyd warsaw?","alternateName":"Events in Warsaw","url":"https://events-in-warsaw.vercel.app/","inLanguage":"en","description":"English events in Warsaw from Luma, Meetup, Eventbrite and Resident Advisor in one calendar."},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"What's on in Warsaw this weekend in English?","acceptedAnswer":{"@type":"Answer","text":"wyd warsaw? lists every public English-friendly event in Warsaw from Luma, Meetup, Eventbrite and Resident Advisor. Pick a weekend day in the calendar, or use Surprise me to get a random pick for this weekend and your budget."}},
+{"@type":"Question","name":"Where can I find English events in Warsaw?","acceptedAnswer":{"@type":"Answer","text":"Events in English are spread across Luma, Meetup, Eventbrite and Resident Advisor. wyd warsaw? gathers all four into one calendar and filters for events in English, including language exchanges, stand-up comedy, tech meetups, networking, art and club nights."}},
+{"@type":"Question","name":"Can I add Warsaw events to Google Calendar?","acceptedAnswer":{"@type":"Answer","text":"Yes. Tap Add to Google Calendar and confirm, and every English event in Warsaw appears as its own calendar that updates on its own. Apple Calendar works too through File, New Calendar Subscription, with the feed link https://events-in-warsaw.vercel.app/warsaw.ics."}},
+{"@type":"Question","name":"Are there free events in Warsaw?","acceptedAnswer":{"@type":"Answer","text":"Plenty. Many meetups, language exchanges and talks are free. Event cards show a Free tag, and Surprise me can pick only free events."}}
+]}
+]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet">
@@ -186,7 +215,17 @@
   .state { padding: 80px 0; text-align: center; color: var(--muted); font: 15px var(--mono); }
   .state .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-right: 10px; animation: pulse 1s infinite alternate; }
 
-  .howto { margin-top: 56px; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); display: grid; gap: 10px; }
+  .about { margin-top: 56px; display: grid; gap: 12px; max-width: 760px; }
+  .about h2 { font: 800 clamp(26px, 3.4vw, 34px)/1.1 var(--display); letter-spacing: -.02em; }
+  .about > p { color: var(--muted); font-size: 16px; }
+  .faq { display: grid; gap: 8px; margin-top: 6px; }
+  .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; }
+  .faq summary { cursor: pointer; font: 700 16px var(--display); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; color: var(--purple); font-size: 20px; line-height: 1; transition: transform .2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+  .howto { margin-top: 32px; padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: var(--card); display: grid; gap: 10px; }
   .howto h2 { font: 800 28px var(--display); letter-spacing: -.02em; }
   .howto p, .howto li { color: var(--muted); font-size: 15px; }
   .howto ol { padding-left: 20px; display: grid; gap: 6px; }
@@ -303,6 +342,17 @@
     <div class="grid" id="grid"></div>
     <div id="dayPanel"><p class="state"><span class="dot"></span>Gathering events from four sites</p></div>
   </main>
+
+  <section class="about" aria-labelledby="aboutTitle">
+    <h2 id="aboutTitle">English events in Warsaw, all in one place</h2>
+    <p>Looking for things to do in Warsaw in English? Events are scattered across Luma, Meetup, Eventbrite and Resident Advisor, and each site only shows its own. wyd warsaw? pulls them together every hour, so you can see what's on today, this weekend or next month: meetups, stand-up comedy, language exchanges, tech talks, startup and networking nights, art, wellness, sport and club nights.</p>
+    <div class="faq">
+      <details><summary>What's on in Warsaw this weekend in English?</summary><p>Tap a Saturday or Sunday in the calendar to see everything that day, or use Surprise me and choose "This weekend" for a random pick within your budget.</p></details>
+      <details><summary>Where do the events come from?</summary><p>Luma, Meetup, Eventbrite and Resident Advisor. Events posted on more than one site show up once, with every link.</p></details>
+      <details><summary>How do you know an event is in English?</summary><p>It reads the event's title and description and checks which language they're written in. Bilingual events count. Club nights are listed too, since the music speaks for itself. Switch to "Everything" to see Polish and other events as well.</p></details>
+      <details><summary>Are there free events in Warsaw?</summary><p>Plenty. Look for the Free tag, or set Surprise me's budget to Free.</p></details>
+    </div>
+  </section>
 
   <section class="howto">
     <h2>Put it in your calendar</h2>
@@ -561,8 +611,24 @@ dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 
 document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); renderFilters(); render(); });
 
+// Event structured data for search engines: the next 60 English events.
+function eventSchema() {
+  const now = Date.now();
+  const list = events.filter((e) => e.english && Date.parse(e.start) > now).slice(0, 60).map((e) => ({
+    '@type': 'Event', name: e.name, startDate: e.start, ...(e.end && { endDate: e.end }), url: e.url,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode', eventStatus: 'https://schema.org/EventScheduled',
+    location: { '@type': 'Place', name: e.venue || 'Warsaw', address: { '@type': 'PostalAddress', streetAddress: e.location, addressLocality: 'Warsaw', addressCountry: 'PL' } },
+    ...(e.cover && { image: [e.cover] }), ...(e.host && { organizer: { '@type': 'Organization', name: e.host } }),
+    ...(e.free && { isAccessibleForFree: true }),
+  }));
+  let tag = document.getElementById('eventsLd');
+  if (!tag) { tag = document.createElement('script'); tag.type = 'application/ld+json'; tag.id = 'eventsLd'; document.head.appendChild(tag); }
+  tag.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'ItemList', name: 'Upcoming English events in Warsaw', itemListElement: list.map((item, i) => ({ '@type': 'ListItem', position: i + 1, item })) });
+}
+
 function load(d) {
   events = d.events;
+  eventSchema();
   renderFilters();
   document.getElementById('foot').textContent = 'Updated ' + fmt({ dateStyle: 'medium', timeStyle: 'short' }).format(new Date(d.updated)) + ' · ' + Object.entries(d.status).map(([k, v]) => `${k} ${typeof v === 'number' ? v : 'unavailable'}`).join(', ');
   render();

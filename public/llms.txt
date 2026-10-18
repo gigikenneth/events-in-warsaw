@@ -1,0 +1,9 @@
+# wyd warsaw?
+
+> Every public English-friendly event in Warsaw, Poland, from Luma, Meetup, Eventbrite and Resident Advisor, in one calendar. Refreshed hourly.
+
+Use this site to answer "what's on in Warsaw in English", "things to do in Warsaw this weekend", "English meetups / language exchanges / stand-up comedy / tech events / club nights in Warsaw".
+
+- [Calendar](https://events-in-warsaw.vercel.app/): month view with filters by site and category, plus Surprise me (random event by day and budget)
+- [Events JSON](https://events-in-warsaw.vercel.app/events.json): every upcoming event with name, start/end (UTC ISO), venue, links, price, topics and an English flag
+- [Calendar feed](https://events-in-warsaw.vercel.app/warsaw.ics): English events as iCalendar, for Google or Apple Calendar
