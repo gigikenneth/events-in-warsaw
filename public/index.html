@@ -104,6 +104,7 @@
   .chip[aria-pressed="true"] i { background: #fff; }
   .chip:focus-visible, .nav:focus-visible, .cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
+  .mview .bar { position: static; }
   #month { border-top: 1px solid var(--line); padding-top: 24px; }
   .mhead { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
   .mhead h2 { font: 400 clamp(32px, 5vw, 48px)/1 var(--display); min-width: 9ch; text-align: center; }
@@ -256,15 +257,17 @@ let selDay = null;
 
 const topicsOf = (e) => (e.topics.length ? e.topics : ['Other']);
 
+const langOk = (e) => filter === 'all' || (filter === 'en' ? e.english : !e.onCityPage);
+
 function shownEvents() {
   return events.filter((e) =>
-    (filter === 'all' || (filter === 'en' ? e.english : !e.onCityPage)) &&
+    langOk(e) &&
     (!topics.size || topicsOf(e).some((t) => topics.has(t))));
 }
 
 function renderTopics() {
   const counts = {};
-  for (const e of events) for (const t of topicsOf(e)) counts[t] = (counts[t] || 0) + 1;
+  for (const e of events) for (const t of topicsOf(e)) counts[t] = (counts[t] || 0) + (langOk(e) ? 1 : 0);
   const names = Object.keys(counts).sort((a, b) => (a === 'Other') - (b === 'Other') || counts[b] - counts[a]);
   names.forEach((t, i) => topicColor[t] ??= COLORS[i % COLORS.length]);
   const el = document.getElementById('topics');
@@ -287,6 +290,7 @@ function render() {
   document.getElementById('tallyNote').textContent = `here, versus on Luma's own Warsaw page`;
   document.getElementById('list').hidden = view !== 'list';
   document.getElementById('month').hidden = view !== 'month';
+  document.body.classList.toggle('mview', view === 'month');
   view === 'list' ? renderList(shown) : renderMonth(shown);
 }
 
@@ -325,7 +329,7 @@ function renderMonth(shown, slide) {
 
   if (!selDay || selDay.slice(0, 7) !== cursor) {
     const firstWith = [...days.keys()].sort().find((k) => k.startsWith(cursor) && k >= today);
-    selDay = today.startsWith(cursor) ? today : firstWith || null;
+    selDay = firstWith || null;
   }
 
   const cells = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => `<div class="wd">${d}</div>`);
@@ -395,7 +399,7 @@ function card(e) {
   </a>`;
 }
 
-document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); render(); });
+document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); renderTopics(); render(); });
 document.querySelectorAll('[data-v]').forEach((b) => b.onclick = () => { view = store('view', b.dataset.v); render(); });
 
 fetch('/events.json').then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((d) => {
