@@ -1,4 +1,4 @@
-# Events in Warsaw
+# wyd warsaw?
 
 Every public event in Warsaw from Luma, Meetup, Eventbrite and Resident Advisor in one calendar, with an English filter for English speakers. Also served as a calendar feed you can subscribe to in Google or Apple Calendar.
 
