@@ -130,6 +130,59 @@
   @keyframes slideL { from { opacity: 0; transform: translateX(40px); } }
   @keyframes slideR { from { opacity: 0; transform: translateX(-40px); } }
 
+  /* stickers */
+  header { position: relative; }
+  .stk { position: absolute; pointer-events: none; z-index: 0; animation: bob 6s ease-in-out infinite; }
+  .stk svg { display: block; width: 100%; height: 100%; }
+  .s-star { width: 54px; top: -6px; right: 30%; animation-delay: -1s; }
+  .s-smile { width: 58px; top: 70px; right: 6%; animation-delay: -3s; animation-duration: 7s; }
+  .s-squig { width: 90px; bottom: 40px; right: 36%; animation-delay: -2s; animation-duration: 8s; }
+  .s-arrow { width: 70px; bottom: 74px; right: 210px; animation-delay: -4s; }
+  .s-spark { width: 30px; top: -10px; left: -14px; animation-duration: 5s; }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-8px) rotate(5deg); } }
+  header > div, .tally { position: relative; z-index: 1; }
+  .mhead { position: relative; }
+
+  /* category cards */
+  #topics { gap: 8px; }
+  .cat { all: unset; cursor: pointer; flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 16px; background: color-mix(in srgb, var(--c) 45%, #fff); border: 2px solid transparent; font: 600 14px var(--body); color: var(--fg); transition: transform .15s, border-color .15s, box-shadow .15s; }
+  .cat .ic { width: 32px; height: 32px; border-radius: 11px; background: var(--c); display: grid; place-items: center; font-size: 17px; }
+  .cat small { font: 600 12px var(--body); opacity: .6; }
+  .cat:hover { transform: translateY(-2px) rotate(-1deg); }
+  .cat[aria-pressed="true"] { border-color: var(--fg); box-shadow: 3px 3px 0 var(--fg); }
+  .cat:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  .tag.cat-t { background: color-mix(in srgb, var(--c) 55%, #fff); color: var(--fg); }
+
+  /* busy days */
+  .cell.busy:not(.out) { background: color-mix(in srgb, var(--yellow) 32%, #fff); }
+  .cell.busy .dots i { width: 7px; height: 7px; }
+
+  /* empty state */
+  .empty-state { text-align: center; padding: 40px 16px 24px; }
+  .empty-state svg { width: 120px; height: auto; animation: bob 5s ease-in-out infinite; }
+  .empty-state h4 { font: 800 22px var(--display); letter-spacing: -.02em; margin-top: 10px; }
+  .empty-state p { color: var(--muted); font-size: 15px; margin-top: 4px; }
+
+  /* surprise me */
+  .btn.fun { background: var(--orange); color: var(--fg); }
+  .btn.fun:hover { background: #ff6633; }
+  .fab { display: none; }
+  dialog { border: 0; padding: 0; border-radius: 28px; background: var(--bg); color: var(--fg); width: min(520px, calc(100vw - 32px)); box-shadow: 0 30px 80px #211B3840; }
+  dialog::backdrop { background: #211B3866; backdrop-filter: blur(3px); }
+  .sheet { padding: 24px; display: grid; gap: 16px; }
+  .sheet h3 { font: 800 28px var(--display); letter-spacing: -.02em; display: flex; justify-content: space-between; align-items: center; }
+  .sheet .x { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--card); border: 1px solid var(--line); font: 600 20px var(--body); }
+  .sheet label { font: 700 13px var(--body); color: var(--muted); display: block; margin-bottom: 6px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opts button { all: unset; cursor: pointer; padding: 8px 14px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font: 600 14px var(--body); }
+  .opts button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .opts button:focus-visible, .sheet .x:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+  #pick { background: var(--card); border-radius: 20px; padding: 6px; }
+  #pick:empty { display: none; }
+  #pick .ev { animation: pop .35s both; }
+  .pick-note { font-size: 13px; color: var(--muted); padding: 0 12px 8px; }
+  @keyframes pop { from { opacity: 0; transform: scale(.94) rotate(-1deg); } }
+
   .state { padding: 80px 0; text-align: center; color: var(--muted); font: 15px var(--mono); }
   .state .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); margin-right: 10px; animation: pulse 1s infinite alternate; }
 
@@ -189,13 +242,30 @@
     footer { word-break: break-word; }
   }
   @media (max-width: 379px) { #todayBtn { display: none; } }
+  @media (max-width: 720px) {
+    .s-squig, .s-arrow { display: none; }
+    .s-star { width: 40px; top: 30px; right: 18%; }
+    .s-smile { width: 44px; top: 96px; right: 2%; }
+    .s-spark { width: 22px; }
+    .actions #surpriseBtn { display: none; }
+    .fab { display: inline-flex; position: fixed; z-index: 20; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); box-shadow: 0 10px 30px #211B3840; padding: 14px 20px; font-size: 15px; }
+    .wrap { padding-bottom: 110px; }
+    dialog { width: 100vw; max-width: 100vw; margin: auto 0 0; border-radius: 28px 28px 0 0; }
+    .sheet { padding: 22px 16px calc(22px + env(safe-area-inset-bottom)); }
+    .cat { padding: 6px 12px 6px 6px; font-size: 13px; }
+    .cat .ic { width: 28px; height: 28px; font-size: 15px; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
+    <span class="stk s-star" aria-hidden="true"><svg viewBox="0 0 60 60"><path d="M30 4 L37 22 L56 24 L41 36 L46 55 L30 44 L14 55 L19 36 L4 24 L23 22 Z" fill="#FFD95A" stroke="#211B38" stroke-width="3" stroke-linejoin="round"/></svg></span>
+    <span class="stk s-smile" aria-hidden="true"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="26" fill="#FF754A" stroke="#211B38" stroke-width="3"/><circle cx="21" cy="25" r="3.5" fill="#211B38"/><circle cx="39" cy="25" r="3.5" fill="#211B38"/><path d="M18 35 Q30 47 42 35" fill="none" stroke="#211B38" stroke-width="3.5" stroke-linecap="round"/></svg></span>
+    <span class="stk s-squig" aria-hidden="true"><svg viewBox="0 0 100 30"><path d="M4 18 Q16 2 28 16 T52 16 T76 16 T96 12" fill="none" stroke="#FFADD5" stroke-width="7" stroke-linecap="round"/></svg></span>
+    <span class="stk s-arrow" aria-hidden="true"><svg viewBox="0 0 80 50"><path d="M6 40 C 24 6, 52 6, 70 24" fill="none" stroke="#7045F6" stroke-width="4" stroke-linecap="round"/><path d="M58 20 L71 25 L66 11" fill="none" stroke="#7045F6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <div>
-      <p class="kicker">Luma · Meetup · Eventbrite · Resident Advisor</p>
+      <p class="kicker" style="position:relative"><span class="stk s-spark" aria-hidden="true"><svg viewBox="0 0 30 30"><path d="M15 2 Q17 13 28 15 Q17 17 15 28 Q13 17 2 15 Q13 13 15 2 Z" fill="#7045F6"/></svg></span>Luma · Meetup · Eventbrite · Resident Advisor</p>
       <h1>wyd<br><em>warsaw?</em></h1>
       <p class="lede">Every public event in the city from four event sites, in one calendar, <b>filtered for English speakers</b>.</p>
     </div>
@@ -208,6 +278,7 @@
   <div class="bar">
     <div class="row">
       <div class="actions">
+        <button class="btn fun" id="surpriseBtn">🎲 Surprise me</button>
         <a class="btn primary" id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
         <button class="btn ghost" id="copy">Copy feed link</button>
       </div>
@@ -245,6 +316,16 @@
   <footer id="foot"></footer>
 </div>
 <div class="toast" id="toast" role="status">Feed link copied</div>
+<button class="btn fun fab" id="fab">🎲 Surprise me</button>
+<dialog id="surprise" aria-labelledby="sTitle">
+  <div class="sheet">
+    <h3 id="sTitle">Surprise me <button class="x" id="sClose" aria-label="Close">×</button></h3>
+    <div><label>When</label><div class="opts" id="sWhen"></div></div>
+    <div><label>Budget</label><div class="opts" id="sBudget"></div></div>
+    <button class="btn primary" id="sGo" style="justify-content:center">Pick something for me</button>
+    <div id="pick"></div>
+  </div>
+</dialog>
 
 <script>
 const TZ = 'Europe/Warsaw';
@@ -262,6 +343,14 @@ const dayKey = fmt({ year: 'numeric', month: '2-digit', day: '2-digit' });
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const COLORS = ['#FFADD5', '#FF754A', '#FFD95A', '#B9A5FB', '#FFC9AE', '#FFE89E', '#D9CDFD', '#FFD3E8']; // light enough for ink text
+// Each category gets its own colour and icon; unknown ones fall back to the palette.
+const CATS = {
+  Tech: ['💻', '#B9A5FB'], AI: ['🤖', '#D9CDFD'], 'Music & Nightlife': ['🪩', '#FFADD5'], 'Arts & Culture': ['🎨', '#FFC9AE'],
+  Social: ['💬', '#FFE89E'], Business: ['💼', '#D9CDFD'], 'Food & Drink': ['🍜', '#FF754A'], Fitness: ['💪', '#FFD95A'],
+  Running: ['👟', '#FFD95A'], 'Language Exchange': ['🗣️', '#FFD3E8'], Games: ['🎲', '#FFADD5'], Wellness: ['🧘', '#FFE89E'],
+  Climate: ['🌱', '#FFE89E'], Family: ['🧸', '#FFD3E8'], Crypto: ['🪙', '#FFD95A'], Other: ['✨', '#ECE6DA'],
+};
+const catIcon = (t) => CATS[t]?.[0] || '📍';
 const ymd = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }); // yyyy-mm-dd in Warsaw time
 const store = (k, v) => { try { v === undefined ? (v = localStorage.getItem(k)) : localStorage.setItem(k, v); } catch {} return v; };
 
@@ -289,9 +378,14 @@ function renderChips(id, key, of, label, color) {
   for (const e of events) for (const t of of(e)) counts[t] = (counts[t] || 0) + (langOk(e) ? 1 : 0);
   const names = Object.keys(counts).sort((a, b) => (a === 'Other') - (b === 'Other') || counts[b] - counts[a]);
   const set = picked[key], el = document.getElementById(id);
-  el.innerHTML = `<button class="chip" data-t="" style="--c:var(--purple);--ct:#fff" aria-pressed="${!set.size}">${label}</button>` +
-    names.filter((t) => counts[t] || set.has(t)).map((t) => `<button class="chip" data-t="${esc(t)}" style="--c:${color(t, names.indexOf(t))}${key === 'sources' ? ';--ct:#fff' : ''}" aria-pressed="${set.has(t)}"><i></i>${esc(t)} <small>${counts[t]}</small></button>`).join('');
-  el.querySelectorAll('.chip').forEach((b) => b.onclick = () => {
+  names.forEach((t, i) => color(t, i)); // colour every category, even ones filtered to zero
+  const shown = names.filter((t) => counts[t] || set.has(t));
+  el.innerHTML = key === 'topics'
+    ? `<button class="cat" data-t="" style="--c:var(--purple)" aria-pressed="${!set.size}"><span class="ic">🌈</span>${label}</button>` +
+      shown.map((t) => `<button class="cat" data-t="${esc(t)}" style="--c:${color(t, names.indexOf(t))}" aria-pressed="${set.has(t)}"><span class="ic">${catIcon(t)}</span>${esc(t)} <small>${counts[t]}</small></button>`).join('')
+    : `<button class="chip" data-t="" style="--c:var(--purple);--ct:#fff" aria-pressed="${!set.size}">${label}</button>` +
+      shown.map((t) => `<button class="chip" data-t="${esc(t)}" style="--c:${color(t, names.indexOf(t))};--ct:#fff" aria-pressed="${set.has(t)}"><i></i>${esc(t)} <small>${counts[t]}</small></button>`).join('');
+  el.querySelectorAll('button').forEach((b) => b.onclick = () => {
     const t = b.dataset.t;
     if (!t) set.clear(); else set.has(t) ? set.delete(t) : set.add(t);
     store(key, JSON.stringify([...set]));
@@ -300,7 +394,7 @@ function renderChips(id, key, of, label, color) {
 }
 function renderFilters() {
   renderChips('sources', 'sources', sourcesOf, 'All sites', () => 'var(--purple)');
-  renderChips('topics', 'topics', topicsOf, 'All topics', (t, i) => (topicColor[t] ??= COLORS[i % COLORS.length]));
+  renderChips('topics', 'topics', topicsOf, 'All topics', (t, i) => (topicColor[t] ??= CATS[t]?.[1] || COLORS[i % COLORS.length]));
 }
 
 function render() {
@@ -335,7 +429,7 @@ function renderMonth(shown, slide) {
   for (let i = 0; i < weeks * 7; i++) {
     const k = new Date(+start + i * 864e5).toISOString().slice(0, 10);
     const evs = days.get(k) || [];
-    const cls = ['cell', !k.startsWith(cursor) && 'out', !evs.length && 'empty', k < today && 'past', k === today && 'today', k === selDay && 'sel'].filter(Boolean).join(' ');
+    const cls = ['cell', !k.startsWith(cursor) && 'out', !evs.length && 'empty', k < today && 'past', k === today && 'today', k === selDay && 'sel', evs.length >= 6 && 'busy'].filter(Boolean).join(' ');
     const label = `${Number(k.slice(8))}, ${evs.length} event${evs.length === 1 ? '' : 's'}`;
     cells.push(`<button class="${cls}" data-k="${k}" aria-label="${label}"><span class="d">${Number(k.slice(8))}</span>
       ${evs.slice(0, 3).map((e) => `<span class="pill" style="--c:${topicColor[topicsOf(e)[0]]}">${esc(e.name)}</span>`).join('')}
@@ -345,13 +439,21 @@ function renderMonth(shown, slide) {
   const grid = document.getElementById('grid');
   grid.innerHTML = cells.join('');
   grid.className = 'grid' + (slide ? ' slide-' + slide : '');
-  grid.querySelectorAll('.cell:not(.empty)').forEach((c) => c.onclick = () => { selDay = c.dataset.k; renderMonth(shownEvents()); document.getElementById('dayPanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+  grid.querySelectorAll('.cell:not(.empty)').forEach((c) => c.onclick = () => { selDay = c.dataset.k; renderMonth(shownEvents()); document.getElementById('dayPanel').scrollIntoView({ behavior: 'smooth', block: matchMedia('(max-width: 720px)').matches ? 'start' : 'nearest' }); });
 
   const panel = document.getElementById('dayPanel');
   const evs = selDay && days.get(selDay);
   panel.innerHTML = evs
     ? `<h3 class="dp">${new Date(selDay + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })}</h3><div class="events">${evs.map(card).join('')}</div>`
-    : `<p class="state">${[...days.keys()].some((k) => k.startsWith(cursor)) ? 'Tap a day to see its events.' : 'Nothing posted for this month yet. Hosts usually list events two to four weeks out.'}</p>`;
+    : [...days.keys()].some((k) => k.startsWith(cursor))
+      ? '<p class="state">Tap a day to see what\'s on.</p>'
+      : empty(events.length && !shown.length ? 'Try loosening your filters.' : 'Hosts usually post events two to four weeks out.');
+}
+
+function empty(sub) {
+  return `<div class="empty-state">
+    <svg viewBox="0 0 120 100" aria-hidden="true"><rect x="14" y="18" width="92" height="74" rx="16" fill="#fff" stroke="#211B38" stroke-width="3"/><rect x="14" y="18" width="92" height="22" rx="16" fill="#7045F6" stroke="#211B38" stroke-width="3"/><path d="M14 34 H106" stroke="#211B38" stroke-width="3"/><path d="M38 10 V26 M82 10 V26" stroke="#211B38" stroke-width="5" stroke-linecap="round"/><circle cx="46" cy="62" r="5" fill="#211B38"/><circle cx="74" cy="62" r="5" fill="#211B38"/><circle cx="48" cy="60" r="1.6" fill="#fff"/><circle cx="76" cy="60" r="1.6" fill="#fff"/><path d="M52 78 Q60 74 68 78" fill="none" stroke="#211B38" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="74" r="5" fill="#FFADD5"/><circle cx="86" cy="74" r="5" fill="#FFADD5"/></svg>
+    <h4>Nothing happening here... yet 👀</h4><p>${sub}</p></div>`;
 }
 
 function shiftMonth(n) {
@@ -365,7 +467,7 @@ document.getElementById('prev').onclick = () => shiftMonth(-1);
 document.getElementById('next').onclick = () => shiftMonth(1);
 document.getElementById('todayBtn').onclick = () => { cursor = ymd.format(new Date()).slice(0, 7); selDay = null; renderMonth(shownEvents()); };
 addEventListener('keydown', (e) => {
-  if (e.target.closest('input, textarea')) return;
+  if (e.target.closest('input, textarea') || document.getElementById('surprise').open) return;
   if (e.key === 'ArrowLeft') shiftMonth(-1);
   if (e.key === 'ArrowRight') shiftMonth(1);
 });
@@ -386,6 +488,7 @@ function card(e) {
     e.free && '<span class="tag free">Free</span>',
     e.price && !e.free && `<span class="tag price">${esc(e.price)}</span>`,
     !e.english && '<span class="tag pl">Not in English</span>',
+    `<span class="tag cat-t" style="--c:${topicColor[topicsOf(e)[0]] || '#ECE6DA'}">${catIcon(topicsOf(e)[0])} ${esc(topicsOf(e)[0])}</span>`,
   ].filter(Boolean).join('');
   return `<a class="ev" href="${esc(e.url)}" target="_blank" rel="noopener">
     <img src="${esc(e.cover)}" alt="" loading="lazy" onerror="this.removeAttribute('src')">
@@ -397,6 +500,61 @@ function card(e) {
     <span class="arrow" aria-hidden="true">→</span>
   </a>`;
 }
+
+// Surprise me: a random event from the current filters, narrowed by when and budget.
+const WHEN = [['today', 'Today'], ['tomorrow', 'Tomorrow'], ['weekend', 'This weekend'], ['picked', 'Day I picked'], ['any', 'Any time']];
+const BUDGET = [['any', 'Any'], ['free', 'Free'], ['50', 'Under 50 zł'], ['100', 'Under 100 zł']];
+const pick = { when: 'today', budget: 'any' };
+const plnPrice = (e) => (e.free ? 0 : /PLN/i.test(e.price) ? parseFloat(e.price) : null); // null = unknown price
+
+function whenDays() {
+  const now = new Date(), key = (d) => ymd.format(d), plus = (n) => new Date(+now + n * 864e5);
+  const dow = (now.getDay() + 6) % 7; // Mon = 0
+  return {
+    today: [key(now)], tomorrow: [key(plus(1))],
+    weekend: dow === 6 ? [key(now)] : [key(plus(5 - dow)), key(plus(6 - dow))], // Sunday: just today
+    picked: selDay ? [selDay] : [], any: null,
+  }[pick.when];
+}
+
+function candidates() {
+  const days = whenDays(), now = Date.now();
+  return shownEvents().filter((e) => {
+    if (Date.parse(e.end || e.start) < now) return false;
+    if (days && !days.includes(ymd.format(new Date(e.start)))) return false;
+    if (pick.budget === 'any') return true;
+    const p = plnPrice(e);
+    return p !== null && (pick.budget === 'free' ? p === 0 : p < Number(pick.budget));
+  });
+}
+
+function renderOpts(id, opts, k) {
+  const el = document.getElementById(id);
+  el.innerHTML = opts.filter(([v]) => v !== 'picked' || selDay).map(([v, l]) => `<button data-v="${v}" aria-pressed="${pick[k] === v}">${l}</button>`).join('');
+  el.querySelectorAll('button').forEach((b) => b.onclick = () => { pick[k] = b.dataset.v; renderOpts(id, opts, k); });
+}
+
+function surprise() {
+  const list = candidates(), out = document.getElementById('pick');
+  if (!list.length) { out.innerHTML = empty('Try another day or a bigger budget.'); return; }
+  const e = list[Math.floor(Math.random() * list.length)];
+  out.innerHTML = card(e) + `<p class="pick-note">Picked from ${list.length} match${list.length === 1 ? '' : 'es'}.</p>`;
+  document.getElementById('sGo').textContent = 'Another one';
+}
+
+const dlg = document.getElementById('surprise');
+function openSurprise() {
+  if (pick.when === 'picked' && !selDay) pick.when = 'today';
+  renderOpts('sWhen', WHEN, 'when'); renderOpts('sBudget', BUDGET, 'budget');
+  document.getElementById('pick').innerHTML = '';
+  document.getElementById('sGo').textContent = 'Pick something for me';
+  dlg.showModal();
+}
+document.getElementById('surpriseBtn').onclick = openSurprise;
+document.getElementById('fab').onclick = openSurprise;
+document.getElementById('sGo').onclick = surprise;
+document.getElementById('sClose').onclick = () => dlg.close();
+dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 
 document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); renderFilters(); render(); });
 
