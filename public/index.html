@@ -167,10 +167,10 @@
   .btn.fun { background: var(--orange); color: var(--fg); }
   .btn.fun:hover { background: #ff6633; }
   .fab { display: none; }
-  dialog { border: 0; padding: 0; border-radius: 28px; background: var(--bg); color: var(--fg); width: min(520px, calc(100vw - 32px)); box-shadow: 0 30px 80px #211B3840; }
+  dialog { margin: auto; border: 0; padding: 0; border-radius: 28px; background: var(--bg); color: var(--fg); width: min(520px, calc(100vw - 32px)); box-shadow: 0 30px 80px #211B3840; }
   dialog::backdrop { background: #211B3866; backdrop-filter: blur(3px); }
   .sheet { padding: 24px; display: grid; gap: 16px; }
-  .sheet h3 { font: 800 28px var(--display); letter-spacing: -.02em; display: flex; justify-content: space-between; align-items: center; }
+  .sheet > h3 { font: 800 28px var(--display); letter-spacing: -.02em; display: flex; justify-content: space-between; align-items: center; }
   .sheet .x { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--card); border: 1px solid var(--line); font: 600 20px var(--body); }
   .sheet label { font: 700 13px var(--body); color: var(--muted); display: block; margin-bottom: 6px; }
   .opts { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -425,11 +425,14 @@ function renderMonth(shown, slide) {
     selDay = firstWith || null;
   }
 
+  // busiest quarter of this month's days (at least 5 events) get the "busy" wash
+  const counts = [...days].filter(([k]) => k.startsWith(cursor)).map(([, v]) => v.length).sort((a, b) => a - b);
+  const busyAt = Math.max(5, counts[Math.floor(counts.length * 0.75)] || Infinity);
   const cells = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => `<div class="wd">${d}</div>`);
   for (let i = 0; i < weeks * 7; i++) {
     const k = new Date(+start + i * 864e5).toISOString().slice(0, 10);
     const evs = days.get(k) || [];
-    const cls = ['cell', !k.startsWith(cursor) && 'out', !evs.length && 'empty', k < today && 'past', k === today && 'today', k === selDay && 'sel', evs.length >= 6 && 'busy'].filter(Boolean).join(' ');
+    const cls = ['cell', !k.startsWith(cursor) && 'out', !evs.length && 'empty', k < today && 'past', k === today && 'today', k === selDay && 'sel', evs.length >= busyAt && 'busy'].filter(Boolean).join(' ');
     const label = `${Number(k.slice(8))}, ${evs.length} event${evs.length === 1 ? '' : 's'}`;
     cells.push(`<button class="${cls}" data-k="${k}" aria-label="${label}"><span class="d">${Number(k.slice(8))}</span>
       ${evs.slice(0, 3).map((e) => `<span class="pill" style="--c:${topicColor[topicsOf(e)[0]]}">${esc(e.name)}</span>`).join('')}
