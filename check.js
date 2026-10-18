@@ -25,8 +25,7 @@ console.log(`${events.length} events after merge, ${en.length} English, ${events
 for (const e of events.filter((e) => e.links.length > 1)) console.log('  merged:', e.name.slice(0, 50), e.links.map((l) => l.source).join(' + '));
 const ics = toICS(en);
 assert(ics.startsWith('BEGIN:VCALENDAR') && ics.split('BEGIN:VEVENT').length - 1 === en.length);
-const d = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Warsaw' });
-const keys = events.map((e) => d.format(new Date(e.start)) + e.name);
-assert.equal(new Set(keys).size, keys.length, 'duplicate same-day titles');
+const keys = events.map((e) => e.start + e.name); // same title twice a day at different times is two sessions
+assert.equal(new Set(keys).size, keys.length, 'duplicate events');
 assert(Object.values(status).every((s) => typeof s === 'number'), 'a source failed');
 console.log('ok');

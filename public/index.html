@@ -56,7 +56,6 @@
 
   .tally { text-align: right; }
   .tally .n { font: 400 clamp(64px, 10vw, 108px)/1 var(--display); color: var(--blue); }
-  .tally .n span { color: var(--muted); font-size: .42em; margin: 0 .15em; }
   .tally p { font: 13px var(--mono); color: var(--muted); max-width: 22ch; margin-left: auto; }
 
   .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 22px 0; }
@@ -81,7 +80,6 @@
   .meta .t { font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
   .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .tag { font: 700 12px var(--mono); padding: 3px 9px; border-radius: 999px; }
-  .tag.hidden { background: #d93d8f17; color: var(--pink); }
   .tag.free { background: #3b78d817; color: var(--blue); }
   .tag.pl { background: #7c4fe017; color: var(--violet); }
   .tag.src { background: var(--fg); color: var(--bg); }
@@ -185,7 +183,6 @@
       <div class="seg" role="group" aria-label="Language">
         <button data-f="en" aria-pressed="true">In English</button>
         <button data-f="all" aria-pressed="false">Everything</button>
-        <button data-f="hidden" aria-pressed="false">Hidden by Luma</button>
       </div>
       <div class="chips" id="sources" role="group" aria-label="Sources"></div>
       <div class="chips" id="topics" role="group" aria-label="Topics"></div>
@@ -236,16 +233,15 @@ const ymd = new Intl.DateTimeFormat('en-CA', { timeZone: TZ }); // yyyy-mm-dd in
 const store = (k, v) => { try { v === undefined ? (v = localStorage.getItem(k)) : localStorage.setItem(k, v); } catch {} return v; };
 
 let events = [], topicColor = {};
-let filter = store('filter') || 'en';
+let filter = store('filter') === 'all' ? 'all' : 'en';
 const picked = { topics: new Set(JSON.parse(store('topics') || '[]')), sources: new Set(JSON.parse(store('sources') || '[]')) };
 let cursor = ymd.format(new Date()).slice(0, 7); // yyyy-mm shown in month view
 let selDay = null;
 
 const topicsOf = (e) => (e.topics.length ? e.topics : ['Other']);
 const sourcesOf = (e) => e.links.map((l) => l.source);
-const hiddenOnLuma = (e) => sourcesOf(e).includes('Luma') && !e.onCityPage;
 
-const langOk = (e) => filter === 'all' || (filter === 'en' ? e.english : hiddenOnLuma(e));
+const langOk = (e) => filter === 'all' || e.english;
 
 function shownEvents() {
   return events.filter((e) =>
@@ -277,9 +273,8 @@ function renderFilters() {
 function render() {
   document.querySelectorAll('[data-f]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.f === filter));
   const shown = shownEvents();
-  const onLuma = shown.filter((e) => e.onCityPage).length;
-  document.getElementById('tally').innerHTML = `${shown.length}<span>/</span>${onLuma}`;
-  document.getElementById('tallyNote').textContent = `here, versus on Luma's own Warsaw page`;
+  document.getElementById('tally').textContent = shown.length;
+  document.getElementById('tallyNote').textContent = `events coming up across ${new Set(events.flatMap(sourcesOf)).size} sites`;
   renderMonth(shown);
 }
 
@@ -355,7 +350,6 @@ function card(e) {
   const time = fmt({ hour: '2-digit', minute: '2-digit' }).format(new Date(e.start));
   const tags = [
     `<span class="tag src">${e.links.map((l) => esc(l.source)).join(' · ')}</span>`,
-    hiddenOnLuma(e) && '<span class="tag hidden">Hidden on Luma\'s Warsaw page</span>',
     e.free && '<span class="tag free">Free</span>',
     e.price && !e.free && `<span class="tag price">${esc(e.price)}</span>`,
     !e.english && '<span class="tag pl">Not in English</span>',
