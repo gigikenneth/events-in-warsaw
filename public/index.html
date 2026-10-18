@@ -104,7 +104,7 @@
   .mhead .btn { margin-left: auto; }
   .nav { all: unset; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 700 26px var(--body); background: var(--card); border: 1px solid var(--line); transition: .15s; }
   .nav:hover { background: var(--fg); color: var(--bg); }
-  .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; touch-action: pan-y; user-select: none; }
+  .grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; touch-action: pan-y; user-select: none; }
   .grid.slide-l { animation: slideL .3s both; }
   .grid.slide-r { animation: slideR .3s both; }
   .wd { font: 700 12px var(--body); color: var(--muted); text-align: center; padding: 4px 0; }
@@ -144,17 +144,44 @@
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
   @media (max-width: 720px) {
-    .wrap { padding: 32px 16px 72px; }
-    header { grid-template-columns: 1fr; }
-    .tally { text-align: left; }
-    .tally p { margin-left: 0; }
-    .ev { grid-template-columns: 56px 1fr; gap: 14px; padding: 10px 0; }
-    .ev img { width: 56px; height: 56px; }
-    .arrow { display: none; }
-    .cell { min-height: 58px; padding: 6px 4px; align-items: center; border-radius: 10px; }
+    .wrap { padding: 28px 16px 64px; }
+    header { grid-template-columns: 1fr; gap: 20px; padding-bottom: 24px; }
+    .kicker { margin-bottom: 12px; font-size: 13px; }
+    .lede { margin-top: 14px; font-size: 16px; }
+    .tally { text-align: left; display: flex; align-items: baseline; gap: 10px; }
+    .tally .n { font-size: 44px; }
+    .tally p { margin: 0; max-width: none; }
+    .bar { gap: 10px; padding: 16px 0; }
+    .actions { width: 100%; }
+    .actions .btn { flex: 1; justify-content: center; }
+    .filters { flex-direction: column; align-items: stretch; gap: 8px; }
+    .filters .seg { align-self: flex-start; }
+    /* chip rows scroll sideways instead of stacking six rows deep */
+    .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; }
+    #month { padding-top: 16px; }
+    .mhead { gap: 8px; margin-bottom: 12px; }
+    .mhead h2 { font-size: 26px; min-width: 0; flex: 1; }
+    .nav { width: 38px; height: 38px; font-size: 22px; }
+    .mhead .btn { padding: 8px 12px; }
+    .grid { gap: 3px; }
+    .wd { font-size: 11px; }
+    .cell { min-height: 52px; padding: 6px 2px; align-items: center; border-radius: 10px; }
+    .cell .d { font-size: 13px; }
+    .cell.today .d { width: 24px; height: 24px; }
     .pill, .more { display: none; }
     .dots { display: flex; justify-content: center; }
-    .mhead h2 { font-size: 28px; }
+    #dayPanel { margin-top: 20px; }
+    #dayPanel h3.dp { font-size: 24px; }
+    .ev { grid-template-columns: 56px 1fr; gap: 12px; padding: 10px 0; }
+    .ev img { width: 56px; height: 56px; }
+    .ev h3 { font-size: 16px; }
+    .meta { font-size: 13px; }
+    .arrow { display: none; }
+    .howto { margin-top: 36px; padding: 20px; }
+    .howto h2 { font-size: 24px; }
+    footer { word-break: break-word; }
   }
 </style>
 </head>
@@ -355,7 +382,7 @@ function card(e) {
     !e.english && '<span class="tag pl">Not in English</span>',
   ].filter(Boolean).join('');
   return `<a class="ev" href="${esc(e.url)}" target="_blank" rel="noopener">
-    <img src="${esc(e.cover)}" alt="" loading="lazy">
+    <img src="${esc(e.cover)}" alt="" loading="lazy" onerror="this.removeAttribute('src')">
     <div>
       <h3>${esc(e.name)}</h3>
       <div class="meta"><span class="t">${time}</span>${e.venue ? `<span>${esc(e.venue)}</span>` : ''}${e.host ? `<span>by ${esc(e.host)}</span>` : ''}</div>
@@ -367,13 +394,23 @@ function card(e) {
 
 document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filter = store('filter', b.dataset.f); renderFilters(); render(); });
 
-fetch('/events.json').then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((d) => {
+function load(d) {
   events = d.events;
   renderFilters();
   document.getElementById('foot').textContent = 'Updated ' + fmt({ dateStyle: 'medium', timeStyle: 'short' }).format(new Date(d.updated)) + ' · ' + Object.entries(d.status).map(([k, v]) => `${k} ${typeof v === 'number' ? v : 'unavailable'}`).join(', ');
   render();
+}
+
+// Draw the last events this browser saw straight away, then swap in fresh ones.
+let cached = null;
+try { cached = JSON.parse(localStorage.getItem('events')); } catch {}
+if (cached?.events) load(cached);
+
+fetch('/events.json').then((r) => r.ok ? r.json() : Promise.reject(r.status)).then((d) => {
+  if (d.updated !== cached?.updated) load(d);
+  try { localStorage.setItem('events', JSON.stringify(d)); } catch {}
 }).catch(() => {
-  document.getElementById('dayPanel').innerHTML = '<p class="state">Could not load events just now. Try again in a minute.</p>';
+  if (!cached) document.getElementById('dayPanel').innerHTML = '<p class="state">Could not load events just now. Try again in a minute.</p>';
 });
 </script>
 </body>
