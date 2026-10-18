@@ -154,8 +154,9 @@
     .bar { gap: 10px; padding: 16px 0; }
     .actions { width: 100%; }
     .actions .btn { flex: 1; justify-content: center; }
-    .filters { flex-direction: column; align-items: stretch; gap: 8px; }
-    .filters .seg { align-self: flex-start; }
+    /* grid with minmax(0) so the sideways-scrolling chip rows can't widen the page */
+    .bar, .filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .filters .seg { justify-self: start; }
     /* chip rows scroll sideways instead of stacking six rows deep */
     .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .chips::-webkit-scrollbar { display: none; }
