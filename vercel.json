@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/warsaw.ics", "destination": "/api/feed" },
+    { "source": "/events.json", "destination": "/api/feed?format=json" }
+  ],
+  "functions": { "api/feed.js": { "maxDuration": 60 } }
+}
