@@ -163,7 +163,7 @@
     .chip { flex: none; }
     #month { padding-top: 16px; }
     .mhead { gap: 8px; margin-bottom: 12px; }
-    .mhead h2 { font-size: 26px; min-width: 0; flex: 1; }
+    .mhead h2 { font-size: clamp(20px, 6.6vw, 26px); min-width: 0; flex: 1; white-space: nowrap; }
     .nav { width: 38px; height: 38px; font-size: 22px; }
     .mhead .btn { padding: 8px 12px; }
     .grid { gap: 3px; }
@@ -184,6 +184,7 @@
     .howto h2 { font-size: 24px; }
     footer { word-break: break-word; }
   }
+  @media (max-width: 379px) { #todayBtn { display: none; } }
 </style>
 </head>
 <body>
